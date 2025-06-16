@@ -1,0 +1,7 @@
+# Matlab autosave files
+*.asv
+# Output from Cytosim simulations
+*.cmo
+*.png
+*.html
+*.txt

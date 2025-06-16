@@ -1,0 +1,146 @@
+[
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  generateAstralNetwork_data.c -o build/glnxa64/generateAstralNetwork_data.o",
+    "file": "generateAstralNetwork_data.c",
+    "output": "build/glnxa64/generateAstralNetwork_data.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  rt_nonfinite.c -o build/glnxa64/rt_nonfinite.o",
+    "file": "rt_nonfinite.c",
+    "output": "build/glnxa64/rt_nonfinite.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  generateAstralNetwork_initialize.c -o build/glnxa64/generateAstralNetwork_initialize.o",
+    "file": "generateAstralNetwork_initialize.c",
+    "output": "build/glnxa64/generateAstralNetwork_initialize.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  generateAstralNetwork_terminate.c -o build/glnxa64/generateAstralNetwork_terminate.o",
+    "file": "generateAstralNetwork_terminate.c",
+    "output": "build/glnxa64/generateAstralNetwork_terminate.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  generateAstralNetwork.c -o build/glnxa64/generateAstralNetwork.o",
+    "file": "generateAstralNetwork.c",
+    "output": "build/glnxa64/generateAstralNetwork.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  error.c -o build/glnxa64/error.o",
+    "file": "error.c",
+    "output": "build/glnxa64/error.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  rand.c -o build/glnxa64/rand.o",
+    "file": "rand.c",
+    "output": "build/glnxa64/rand.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  mustBeInteger.c -o build/glnxa64/mustBeInteger.o",
+    "file": "mustBeInteger.c",
+    "output": "build/glnxa64/mustBeInteger.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  colon.c -o build/glnxa64/colon.o",
+    "file": "colon.c",
+    "output": "build/glnxa64/colon.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  repmat.c -o build/glnxa64/repmat.o",
+    "file": "repmat.c",
+    "output": "build/glnxa64/repmat.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  assertValidSizeArg.c -o build/glnxa64/assertValidSizeArg.o",
+    "file": "assertValidSizeArg.c",
+    "output": "build/glnxa64/assertValidSizeArg.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  sum.c -o build/glnxa64/sum.o",
+    "file": "sum.c",
+    "output": "build/glnxa64/sum.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  mod.c -o build/glnxa64/mod.o",
+    "file": "mod.c",
+    "output": "build/glnxa64/mod.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  indexShapeCheck.c -o build/glnxa64/indexShapeCheck.o",
+    "file": "indexShapeCheck.c",
+    "output": "build/glnxa64/indexShapeCheck.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  warning.c -o build/glnxa64/warning.o",
+    "file": "warning.c",
+    "output": "build/glnxa64/warning.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  interface/_coder_generateAstralNetwork_api.c -o build/glnxa64/_coder_generateAstralNetwork_api.o",
+    "file": "interface/_coder_generateAstralNetwork_api.c",
+    "output": "build/glnxa64/_coder_generateAstralNetwork_api.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  interface/_coder_generateAstralNetwork_mex.c -o build/glnxa64/_coder_generateAstralNetwork_mex.o",
+    "file": "interface/_coder_generateAstralNetwork_mex.c",
+    "output": "build/glnxa64/_coder_generateAstralNetwork_mex.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  sumMatrixIncludeNaN.c -o build/glnxa64/sumMatrixIncludeNaN.o",
+    "file": "sumMatrixIncludeNaN.c",
+    "output": "build/glnxa64/sumMatrixIncludeNaN.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  eml_int_forloop_overflow_check.c -o build/glnxa64/eml_int_forloop_overflow_check.o",
+    "file": "eml_int_forloop_overflow_check.c",
+    "output": "build/glnxa64/eml_int_forloop_overflow_check.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  sort.c -o build/glnxa64/sort.o",
+    "file": "sort.c",
+    "output": "build/glnxa64/sort.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  sortIdx.c -o build/glnxa64/sortIdx.o",
+    "file": "sortIdx.c",
+    "output": "build/glnxa64/sortIdx.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  generateAstralNetwork_emxutil.c -o build/glnxa64/generateAstralNetwork_emxutil.o",
+    "file": "generateAstralNetwork_emxutil.c",
+    "output": "build/glnxa64/generateAstralNetwork_emxutil.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  interface/_coder_generateAstralNetwork_info.c -o build/glnxa64/_coder_generateAstralNetwork_info.o",
+    "file": "interface/_coder_generateAstralNetwork_info.c",
+    "output": "build/glnxa64/_coder_generateAstralNetwork_info.o"
+  },
+  {
+    "directory": "/home/bcberg/Documents/astral-mikado/codegen/mex/generateAstralNetwork",
+    "command": "/usr/bin/gcc -fexceptions -fPIC -fno-omit-frame-pointer -pthread -fwrapv -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c99 -I \".\" -I \"/home/bcberg/Documents/astral-mikado\" -I \"./interface\" -I \"/usr/local/MATLAB/R2024a/extern/include\" -I \".\" -DMODEL=generateAstralNetwork_mex -msse2 -fno-predictive-commoning -c -fopenmp -DOMPLIBNAME=\"/usr/local/MATLAB/R2024a/sys/os/glnxa64/libiomp5.so\"  /usr/local/MATLAB/R2024a/extern/version/c_mexapi_version.c -o build/glnxa64/c_mexapi_version.o",
+    "file": "/usr/local/MATLAB/R2024a/extern/version/c_mexapi_version.c",
+    "output": "build/glnxa64/c_mexapi_version.o"
+  }
+]
