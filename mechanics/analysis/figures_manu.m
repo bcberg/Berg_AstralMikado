@@ -9,14 +9,14 @@ set(0,'defaultLegendInterpreter','latex')
 %% Importing data
 
 % Ubuntu paths
-% saveDir = '~/Documents/astral-mikado-data';
-% dataFolder = '~/Documents/astral-mikado-data/mat_files';
-% figureFolder = '~/Documents/astral-mikado-data/subfigures';
+saveDir = '~/Documents/astral-mikado-data';
+dataFolder = '~/Documents/astral-mikado-data/mat_files';
+figureFolder = '~/Documents/astral-mikado-data/subfigures';
 % astralFuncFolder = '~/Documents/astral-mikado/';
 % Windows paths
-dataFolder = 'C:\Users\bcber\Documents\astral-mikado-data\mat_files';
-figureFolder = 'C:\Users\bcber\Documents\astral-mikado-data\subfigures';
-astralFuncFolder = 'C:\Users\bcber\Documents\astral-mikado\';
+% dataFolder = 'C:\Users\bcber\Documents\astral-mikado-data\mat_files';
+% figureFolder = 'C:\Users\bcber\Documents\astral-mikado-data\subfigures';
+% astralFuncFolder = 'C:\Users\bcber\Documents\astral-mikado\';
 
 filetype = '.pdf';
 
@@ -255,9 +255,9 @@ xlim([0,sweep_t.nFilPerAsterList(end)])
 xticks(0:4:sweep_t.nFilPerAsterList(end))
 xlabel('Astral number $a_n$')
 ylim([0,450])   % excludes one high outlier @ a_n = 18
-ylabel({"Young's modulus"; "$Y$ [${\rm pN}\cdot\mu{\rm m^{-1}}$]"})
-exportgraphics(modPlot,fullfile(figureFolder,['moduliVsAstralNum', ...
-    filetype]),'ContentType','vector')
+% ylabel({"Young's modulus"; "$Y$ [${\rm pN}\cdot\mu{\rm m^{-1}}$]"})
+% exportgraphics(modPlot,fullfile(figureFolder,['moduliVsAstralNum', ...
+%     filetype]),'ContentType','vector')
 
 %% MODULUS DISTRIBUTION PLOTS %%
 
@@ -307,8 +307,8 @@ lg = legend(string(modSampling.nFilPerAsterList(chosenTypes)),'Location','east',
     'FontSize',fsz);
 title(lg,'$a_n$')
 lg.Layout.Tile = 'east';
-exportgraphics(modDistPlot,fullfile(figureFolder,['modECDFs',filetype]),...
-    'ContentType','vector')
+% exportgraphics(modDistPlot,fullfile(figureFolder,['modECDFs',filetype]),...
+%     'ContentType','vector')
 
 %% EXAMPLE PROBABILITY DENSITIES (HISTOGRAMS OF MODULI) %%
 
@@ -321,8 +321,8 @@ h.FaceColor = distColors(1,:);
 h.FaceAlpha = 1;
 set(gca,'FontName',fname,'FontSize',insetFsz)
 % ylabel('Prob. density')
-exportgraphics(shear1hist,fullfile(figureFolder,['shear1hist',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(shear1hist,fullfile(figureFolder,['shear1hist',filetype]), ...
+%     'ContentType','vector')
 
 shear16hist = figure(4); clf;
 set(shear16hist,'units','centimeters','Position',[1,1,4,4])
@@ -331,8 +331,8 @@ h.FaceColor = distColors(5,:);
 h.FaceAlpha = 1;
 set(gca,'FontName',fname,'FontSize',insetFsz)
 % ylabel('Prob. density')
-exportgraphics(shear16hist,fullfile(figureFolder,['shear16hist',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(shear16hist,fullfile(figureFolder,['shear16hist',filetype]), ...
+%     'ContentType','vector')
 
 tens1hist = figure(5); clf;
 set(tens1hist,'units','centimeters','Position',[1,1,4,4])
@@ -341,8 +341,8 @@ h.FaceColor = distColors(1,:);
 h.FaceAlpha = 1;
 set(gca,'FontName',fname,'FontSize',insetFsz)
 % ylabel('Prob. density')
-exportgraphics(tens1hist,fullfile(figureFolder,['tens1hist',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(tens1hist,fullfile(figureFolder,['tens1hist',filetype]), ...
+%     'ContentType','vector')
 
 tens16hist = figure(6); clf;
 set(tens16hist,'units','centimeters','Position',[1,1,4,4])
@@ -351,8 +351,8 @@ h.FaceColor = distColors(5,:);
 h.FaceAlpha = 1;
 set(gca,'FontName',fname,'FontSize',insetFsz)
 % ylabel('Prob. density')
-exportgraphics(tens16hist,fullfile(figureFolder,['tens16hist',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(tens16hist,fullfile(figureFolder,['tens16hist',filetype]), ...
+%     'ContentType','vector')
 
 %% PROBABILITY OF RELATIVE WEAKNESS (<0.5*MEDIAN) %%
 
@@ -434,8 +434,8 @@ ylabel(relativelyWeak,'Proportion weaker than half of median', ...
     'FontName',fname,'FontSize',fsz,'Interpreter','latex')
 % lg = legend('NumColumns',2);
 % lg.Layout.Tile = 'south';
-exportgraphics(relativelyWeak,fullfile(figureFolder,['relativelyWeak', ...
-    filetype]),'ContentType','vector')
+% exportgraphics(relativelyWeak,fullfile(figureFolder,['relativelyWeak', ...
+%     filetype]),'ContentType','vector')
 
 %% DANGLING ENDS DISTRIBUTIONS %%
 
@@ -476,8 +476,8 @@ xlabel(endsHists,'Dangling end length [$\mu\rm{m}$]','Interpreter', ...
 ylabel(endsHists,'Probability','FontName',fname,'FontSize',18)
 % lg = legend('All ends','Ends $<\ell$','Interpreter','latex');
 % lg.Layout.Tile = 'east';
-exportgraphics(endsHists,fullfile(figureFolder,['endsHists',filetype]),...
-    'ContentType','vector')
+% exportgraphics(endsHists,fullfile(figureFolder,['endsHists',filetype]),...
+%     'ContentType','vector')
 
 %% MEAN AND TOTAL DANGLING ENDS %%
 
@@ -512,12 +512,13 @@ xticks([1,4:4:24])
 legend([l1,l2,l3],{'All ends','Ends $<\ell$','Use fraction'}, ...
     'Location','south')
 set(gca,'FontName',fname,'FontSize',18)
-exportgraphics(endsSummary,fullfile(figureFolder,['endsSummary',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(endsSummary,fullfile(figureFolder,['endsSummary',filetype]), ...
+%     'ContentType','vector')
 
 %% PERCOLATION DEFINITION VISUALS %%
 
 tbSpanEx = figure(10);
+set(tbSpanEx,'units','centimeters','Position',[1,1,16,12])
 hold on
 plot([0,tbSpanParams.D],[0,0],'-','LineWidth',4,'Color',uciBlue)
 plot([0,tbSpanParams.D],[tbSpanParams.D,tbSpanParams.D],'-', ...
@@ -536,15 +537,18 @@ for idx = 1:size(tbNetwork.springs,1)
         tbNetwork.augNodes(augNodeB,1:2)];
     plot(coords(:,1), coords(:,2),'.-','MarkerSize',18,'LineWidth',3,...
         'Color',uciOrange)
-    if augNodeA <= tbSpanParams.numAsters && tbSpanParams.astralNum >= 2
-        % i.e., if augNodeA is an astral center
-        plot(tbNetwork.augNodes(augNodeA,1),tbNetwork.augNodes(augNodeA,2), ...
-            '.r','MarkerSize',24)
-    elseif augNodeB <= tbSpanParams.numAsters && tbSpanParams.astralNum >= 2
-        % likewise for augNodeB
-        plot(tbNetwork.augNodes(augNodeB,1),tbNetwork.augNodes(augNodeB,2), ...
-            '.r','MarkerSize',24)
-    end
+    % if augNodeA <= tbSpanParams.numAsters && tbSpanParams.astralNum >= 2
+    %     % i.e., if augNodeA is an astral center
+    %     plot(tbNetwork.augNodes(augNodeA,1),tbNetwork.augNodes(augNodeA,2), ...
+    %         '.r','MarkerSize',24)
+    % elseif augNodeB <= tbSpanParams.numAsters && tbSpanParams.astralNum >= 2
+    %     % likewise for augNodeB
+    %     plot(tbNetwork.augNodes(augNodeB,1),tbNetwork.augNodes(augNodeB,2), ...
+    %         '.r','MarkerSize',24)
+    % end
+end
+if tbSpanParams.astralNum >= 2
+    plot(tbAsters.centers(:,1),tbAsters.centers(:,2),'.r','MarkerSize',24)
 end
 hold off
 xlim('tight')
@@ -558,10 +562,11 @@ yticks([])
 h = gca;
 h.XAxis.Visible = 'off';
 h.YAxis.Visible = 'off';
-exportgraphics(tbSpanEx,fullfile(figureFolder,['tbSpanEx',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(tbSpanEx,fullfile(figureFolder,['tbSpanEx_rnd',filetype]), ...
+%     'ContentType','vector')
 
 connEx = figure(11);
+set(connEx,'units','centimeters','Position',[1,1,16,12])
 hold on
 plot([0,connParams.D],[0,0],'-','LineWidth',4,'Color',uciBlue)
 plot([0,connParams.D],[connParams.D,connParams.D],'-','LineWidth', ...
@@ -580,15 +585,18 @@ for idx = 1:size(connNetwork.springs,1)
         connNetwork.augNodes(augNodeB,1:2)];
     plot(coords(:,1), coords(:,2),'.-','MarkerSize',18,'LineWidth',3, ...
         'Color',uciOrange)
-    if augNodeA <= connParams.numAsters && connParams.astralNum >= 2
-        % i.e., if augNodeA is an astral center
-        plot(connNetwork.augNodes(augNodeA,1),connNetwork.augNodes(augNodeA,2), ...
-            '.r','MarkerSize',24)
-    elseif augNodeB <= connParams.numAsters && connParams.astralNum >= 2
-        % likewise for augNodeB
-        plot(connNetwork.augNodes(augNodeB,1),connNetwork.augNodes(augNodeB,2), ...
-            '.r','MarkerSize',24)
-    end
+    % if augNodeA <= connParams.numAsters && connParams.astralNum >= 2
+    %     % i.e., if augNodeA is an astral center
+    %     plot(connNetwork.augNodes(augNodeA,1),connNetwork.augNodes(augNodeA,2), ...
+    %         '.r','MarkerSize',24)
+    % elseif augNodeB <= connParams.numAsters && connParams.astralNum >= 2
+    %     % likewise for augNodeB
+    %     plot(connNetwork.augNodes(augNodeB,1),connNetwork.augNodes(augNodeB,2), ...
+    %         '.r','MarkerSize',24)
+    % end
+end
+if connParams.astralNum >= 2
+    plot(connAsters.centers(:,1),connAsters.centers(:,2),'.r','MarkerSize',24)
 end
 hold off
 xlim('tight')
@@ -597,13 +605,13 @@ xlim(max(abs(xl - connParams.D/2)) * [-1,1] + connParams.D/2)
 xticks([])
 ylim('tight')
 yl = ylim;
-ylim(max(abs(yl - connParams.D/2)) * [-1,1] + tbSpanParams.D/2)
+ylim(max(abs(yl - connParams.D/2)) * [-1,1] + connParams.D/2)
 yticks([])
 h = gca;
 h.XAxis.Visible = 'off';
 h.YAxis.Visible = 'off';
-exportgraphics(connEx,fullfile(figureFolder,['connEx',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(connEx,fullfile(figureFolder,['connEx_rnd',filetype]), ...
+%     'ContentType','vector')
 
 %% PERCOLATION PROBABILITY HEATMAPS %%
 
@@ -644,8 +652,8 @@ ylabel(percMaps,'Astral number $a_n$','Interpreter','latex','FontSize', ...
 bar = colorbar;
 title(bar,'Probability')
 bar.Layout.Tile = 'east';
-exportgraphics(percMaps,fullfile(figureFolder,['percMaps', ...
-    filetype]),'ContentType','vector')
+% exportgraphics(percMaps,fullfile(figureFolder,['percMaps', ...
+%     filetype]),'ContentType','vector')
 
 %% PERCOLATION THRESHOLD ESTIMATES %%
 
@@ -698,8 +706,8 @@ ylabel('Critical density $\rho_c$ [$\mu{\rm m^{-1}}$]')
 set(gca,'FontSize',fsz,'FontName',fname)
 legend({'Spanning','Connectivity'},'Location', ...
     'northeast','FontSize',16,'FontName',fname)
-exportgraphics(threshPlot,fullfile(figureFolder,['threshPlot', ...
-    filetype]),'ContentType','Vector')
+% exportgraphics(threshPlot,fullfile(figureFolder,['threshPlot', ...
+%     filetype]),'ContentType','Vector')
 
 %% CORRELATION BETWEEN deltaRHO AND MODULI %%
 
@@ -748,8 +756,8 @@ leglabels = {sprintf('%1.1f',otherRhoParams.dens(1)),sprintf('%1.1f', ...
     sweep_s.dens),sprintf('%1.1f',otherRhoParams.dens(2))};
 lg = legend(leglabels,'Location','southeast','FontSize',insetFsz);
 title(lg,'$\rho$ [${\rm \mu m^{-1}}$]')
-exportgraphics(corrPlot,fullfile(figureFolder,['corrPlot',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(corrPlot,fullfile(figureFolder,['corrPlot',filetype]), ...
+%     'ContentType','vector')
 
 %% SUPP: SHEAR MODULI VS. ASTRAL NUMBER AT 2 OTHER FILAMENT DENSITIES %%
 
@@ -791,8 +799,8 @@ ylim([0,yl(2)])
 ylabel({'Shear modulus $G$'; '[${\rm pN} \cdot \mu{\rm m}^{-1}$]'})
 lg = legend([l1,l3,l2],'Location','northeast');
 title(lg,'$\rho$ [${\rm \mu m^{-1}}$]')
-exportgraphics(otherRhos,fullfile(figureFolder,['otherRhos',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(otherRhos,fullfile(figureFolder,['otherRhos',filetype]), ...
+%     'ContentType','vector')
 
 %% SUPP: FILAMENT BENDING RIGIDITY (kbend) %%
 
@@ -818,8 +826,8 @@ ylabel('Shear modulus [${\rm pN} \cdot \mu{\rm m^{-1}}$]')
 yl = ylim;
 ylim([0,yl(2)])
 
-exportgraphics(kbendShear,fullfile(figureFolder,['kbendShear',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(kbendShear,fullfile(figureFolder,['kbendShear',filetype]), ...
+%     'ContentType','vector')
 
 %% SUPP: ANGULAR STIFFNESS AT ASTRAL CENTERS (krot) %%
 
@@ -845,8 +853,8 @@ ylabel('Shear modulus [${\rm pN}\cdot \mu{\rm m^{-1}}$]')
 yl = ylim;
 ylim([0,yl(2)])
 
-exportgraphics(krotShear,fullfile(figureFolder,['krotShear',filetype]), ...
-    'ContentType','vector')
+% exportgraphics(krotShear,fullfile(figureFolder,['krotShear',filetype]), ...
+%     'ContentType','vector')
 
 %% SUPP: CROSSLINKER DENSITY %%
 
@@ -870,8 +878,8 @@ ylabel('Shear modulus [${\rm pN}\cdot \mu{\rm m^{-1}}$]')
 yl = ylim;
 ylim([0,yl(2)])
 set(gca,'FontName',fname,'FontSize',fsz2)
-exportgraphics(crslnkDensShear,fullfile(figureFolder, ...
-    ['crslnkDensShear',filetype]),'ContentType','vector')
+% exportgraphics(crslnkDensShear,fullfile(figureFolder, ...
+%     ['crslnkDensShear',filetype]),'ContentType','vector')
 
 %% SUPP: CROSSLINKER STIFFNESS %%
 
@@ -895,8 +903,8 @@ ylabel('Shear modulus [${\rm pN}\cdot\mu{\rm m}^{-1}$]')
 yl = ylim;
 ylim([0,yl(2)])
 set(gca,'FontName',fname,'FontSize',fsz2)
-exportgraphics(crslnkStiffShear,fullfile(figureFolder, ...
-    ['crslnkStiffShear',filetype]),'ContentType','vector')
+% exportgraphics(crslnkStiffShear,fullfile(figureFolder, ...
+%     ['crslnkStiffShear',filetype]),'ContentType','vector')
 
 %% SUPP: MIKADO RIGIDITY (Wilhelm & Frey 2003) %%
 
@@ -925,8 +933,8 @@ legend(string(mikadoParams.dens_list),'Location','eastoutside')
 xlabel('$\log_{10} (D(\rho-\rho_c)^\nu)$','Interpreter','latex')
 ylabel('$\log_{10} (D^{\mu/\nu}\cdot G)$','Interpreter','latex')
 
-exportgraphics(mikadoRig,fullfile(figureFolder,['mikadoRig',filetype]), ...
-    "ContentType",'vector');
+% exportgraphics(mikadoRig,fullfile(figureFolder,['mikadoRig',filetype]), ...
+%     "ContentType",'vector');
 
 %% SUPP: TIMESERIES %%
 
@@ -978,8 +986,8 @@ xlabel('Time [s]')
 ylabel('$y$-center of mass [${\rm \mu m}$]')
 set(gca,'FontSize',fsz2,'FontName',fname)
 
-exportgraphics(timeserShear,fullfile(figureFolder, ...
-    ['timeserShear',filetype]),'ContentType','vector')
+% exportgraphics(timeserShear,fullfile(figureFolder, ...
+%     ['timeserShear',filetype]),'ContentType','vector')
 
 % tensile
 timeserTens = figure(92); clf;
@@ -1030,8 +1038,8 @@ xlabel('Time [s]')
 ylabel('$y$-center of mass [${\rm \mu m}$]')
 set(gca,'FontSize',fsz2,'FontName',fname)
 
-exportgraphics(timeserTens,fullfile(figureFolder, ...
-    ['timeserTens',filetype]),'ContentType','vector')
+% exportgraphics(timeserTens,fullfile(figureFolder, ...
+%     ['timeserTens',filetype]),'ContentType','vector')
 
 %% SUPP: DISPLACEMENT VS FORCE CURVES %%
 
@@ -1064,8 +1072,8 @@ xlabel(forceDispShear,'Shear force [pN]', ...
 ylabel(forceDispShear,'$x$-displacement [${\rm \mu m}$]', ...
     'FontSize',fsz,'FontName',fname,'Interpreter','latex')
 
-exportgraphics(forceDispShear,fullfile(figureFolder, ...
-    ['forceDispShear',filetype]),'ContentType','vector')
+% exportgraphics(forceDispShear,fullfile(figureFolder, ...
+%     ['forceDispShear',filetype]),'ContentType','vector')
 
 % tensile
 forceDispTens = figure(90); clf;
@@ -1092,8 +1100,8 @@ xlabel(forceDispTens,'Tensile force [pN]', ...
 ylabel(forceDispTens,'$y$-displacement [${\rm \mu m}$]', ...
     'FontSize',fsz,'FontName',fname,'Interpreter','latex')
 
-exportgraphics(forceDispTens,fullfile(figureFolder, ...
-    ['forceDispTens',filetype]),'ContentType','vector')
+% exportgraphics(forceDispTens,fullfile(figureFolder, ...
+%     ['forceDispTens',filetype]),'ContentType','vector')
 
 %% SUPP: Percolation probability curves + fits
 
@@ -1136,8 +1144,8 @@ for idx = 1:nNetTypes
         legend('off')
     end
 end
-exportgraphics(spanDataFits,fullfile(figureFolder,['spanDataFits', ...
-    filetype]),'ContentType','vector')
+% exportgraphics(spanDataFits,fullfile(figureFolder,['spanDataFits', ...
+%     filetype]),'ContentType','vector')
 
 connDataFits = figure(88); clf;
 set(connDataFits,'units','centimeters','Position',[1,1,25,10])
@@ -1174,8 +1182,8 @@ for idx = 1:nNetTypes
         legend('off')
     end
 end
-exportgraphics(connDataFits,fullfile(figureFolder,['connDataFits', ...
-    filetype]),'ContentType','vector')
+% exportgraphics(connDataFits,fullfile(figureFolder,['connDataFits', ...
+%     filetype]),'ContentType','vector')
 
 %% SUPP: PRODUCTIVE SEGMENTS PER NODE
 
@@ -1201,8 +1209,8 @@ ylabel("Number of nodes")
 set(gca,"FontName",fname,"FontSize",fsz2)
 xlabel(springPerNodeMeansPlot,"Astral number $a_n$",'FontSize',fsz2, ...
     'Interpreter','latex')
-exportgraphics(springPerNodeMeansPlot,fullfile(figureFolder, ...
-    ['springsPerNodeMeans',filetype]),'ContentType','vector')
+% exportgraphics(springPerNodeMeansPlot,fullfile(figureFolder, ...
+%     ['springsPerNodeMeans',filetype]),'ContentType','vector')
 
 springPerNodeHists = figure(86); clf;
 set(springPerNodeHists,'units','centimeters','Position',[1,1,24,16])
@@ -1232,8 +1240,8 @@ xlabel(springPerNodeHists,'Productive segments per node','Interpreter', ...
     'latex','FontSize',fsz2)
 ylabel(springPerNodeHists,sprintf("Aggregate counts ($N = %i$)", ...
     springCountParams.N),'Interpreter','latex','FontSize',fsz2)
-exportgraphics(springPerNodeHists,fullfile(figureFolder, ...
-    ['springPerNodeHists',filetype]),'ContentType','vector')
+% exportgraphics(springPerNodeHists,fullfile(figureFolder, ...
+%     ['springPerNodeHists',filetype]),'ContentType','vector')
 
 %% FIG1: SAMPLE DISPLACEMENT VS FORCE CURVE
 
@@ -1252,8 +1260,8 @@ xlim('tight')
 xlabel('Shear force [pN]')
 ylabel('$x$-Displacement [${\rm \mu m}$]')
 
-exportgraphics(sampleDispForceShear,fullfile(figureFolder, ...
-    ['sampleDispForceShear',filetype]),'ContentType','vector')
+% exportgraphics(sampleDispForceShear,fullfile(figureFolder, ...
+%     ['sampleDispForceShear',filetype]),'ContentType','vector')
 
 sampleDispForceTens = figure(79); clf;
 set(sampleDispForceTens,'defaultLineLineWidth',1.5,'defaultLineMarkerSize',20)
@@ -1270,5 +1278,5 @@ xlim('tight')
 xlabel('Tensile force [pN]')
 ylabel('$y$-Displacement [${\rm \mu m}$]')
 
-exportgraphics(sampleDispForceTens,fullfile(figureFolder, ...
-    ['sampleDispForceTens',filetype]),'ContentType','vector')
+% exportgraphics(sampleDispForceTens,fullfile(figureFolder, ...
+%     ['sampleDispForceTens',filetype]),'ContentType','vector')

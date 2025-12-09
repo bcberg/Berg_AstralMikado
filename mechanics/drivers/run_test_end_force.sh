@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Adjust below to indicate location of Berg_AstralMikado/ on your machine
-cd ~/Documents/Berg_AstralMikado/mechanics
+# Script intended to run from AstralMikadoCYM
+# Assumes cytosim root is in an "adjacent" folder to AstralMikadoCYM
+cd ~/Documents/AstralMikadoCYM
 export myroot=$PWD
 export rundir=$PWD/runs
-# Adjust below to indicate location of cytosim-bcb/ on your machine
-cd ~/Documents/cytosim-bcb
+cd ../cytosim-bcb
 export cymroot=$PWD
 
 cd $rundir

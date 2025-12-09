@@ -7,7 +7,7 @@ export myroot=$PWD
 export rundir=$PWD/runs
 cd ../cytosim-bcb
 export cymroot=$PWD
-export simName="timeseries_astralNum"
+export simName="timeseries_astralNum_physkT"
 
 cd $rundir
 # prepare directory for each individual run
@@ -36,7 +36,7 @@ done
 for runIdx in {1,2,3,5,6,7}
 do
     runCode=$(printf "%04d" "$runIdx")
-    cp $myroot/displays/${runName}.cyp run${runCode}/display.cyp
+    cp $myroot/displays/timeseries_astralNum.cyp run${runCode}/display.cyp
 done
 # generate .png of each frame for movies
 $cymroot/python/look/scan.py "$cymroot/bin/play display.cyp movie zoom=0.8 size=1024,1024" nproc=8 run????

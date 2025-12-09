@@ -1,7 +1,7 @@
 % Shear an astral network (force sweep w/ manually set random seeds)
-% Brady Berg, 2025-11-25
-% (systematic rescaling based on fil_len, k_bend, viscosity)
-% filament bending rigidity sweep
+% asters have equally spaced filaments
+% additional filament densities
+% Brady Berg, 2025-11-14
 set simul system
 {
     time_step = 0.1
@@ -25,10 +25,9 @@ new cell
 
 [[fiber_len = 0.1]]
 % old 1 --> new 0.1 [um]
-[[kbend = [0.01 * 2**i for i in range(-3,5)]]]
 set fiber actin
 {
-    rigidity       = [[kbend]]
+    rigidity       = 0.01
     segmentation   = [[fiber_len/5]]
     confine        = off %inside,200
     min_length     = [[fiber_len]]  
@@ -88,20 +87,18 @@ set solid core
 set aster actinNode
 {
     stiffness = 500, 250   % stiffness1 (pins filament ends at center), stiffness2 (provides torque)
-
 }
 
 % initialize asters
-[[dens = 75]]
+[[dens = 60,90]]
 % target density N*fiber_len / A: [[dens]]
 [[nFil = round(dens * s**2 / fiber_len)]]
 % target number of filaments: [[nFil]]
-[[nFilPerAster = [1,2,3,4,5,6,8,12,16,20]]]
+[[nFilPerAster = list(range(1,25))]]
 [[nAsters = round(nFil/nFilPerAster)]]
 new [[nAsters]] actinNode
 {
-    type = astral % fibers are anchored at random positions near the center, pointing outward
-    % avoids constraint from type 'radial', requiring sep of 25 nm by default
+    type = regular % fibers are anchored regularly over the surface and point radially
     solid = core
     radius = 0.03
     % point1 = center, 0.01

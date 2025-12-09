@@ -1,4 +1,4 @@
-% rep_shear_aster_otherRhos.m
+% rf_shear_aster_eq_otherRhos.m
 % Brady Berg
 clear
 close all
@@ -7,7 +7,7 @@ format compact
 
 %% Parse report files
 
-simName = "rep_shear_otherRhos251021";
+simName = "rf_shear_aster_eq_otherRhos251115";
 % Ubuntu filepath
 saveDir = '~/Documents/astral-mikado-data';
 % Windows filepath
@@ -17,7 +17,7 @@ newReports = false;
 if newReports
     filtering.TF = true;
     dir = "/home/bcberg/Documents/AstralMikadoCYM/runs/" + ...
-        "rep_full_shear_aster_otherRhos/";
+        "rf_shear_aster_eq_actin_otherRhos/";
     
     % ensure the following parameters match those used in
     % rep_full_shear_aster.cym.tpl and its driver (for numRep)

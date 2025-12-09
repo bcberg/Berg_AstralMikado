@@ -7,35 +7,39 @@ format compact
 
 %% Parse report files
 
-simName = "kbend_shear250228";
+simName = "kbend_shear251129";
 % Ubuntu filepath
 saveDir = '~/Documents/astral-mikado-data';
 % Windows filepath
 % saveDir = 'C:\Users\bcber\Documents\astral-mikado-data';
+dataSubdir = 'mat_files';
+figSubdir = 'exploratory_figures';
 
-newReports = false;
+newReports = true;
 if newReports
+    filtering.TF = true;
     dir = "/home/bcberg/Documents/AstralMikadoCYM/runs/kbend_shear/";
     
     % ensure the following parameters match those used in
     % kbend_shear.cym.tpl and its driver (for numRep)
-    dens = 7.5;  % N * len_fil / A
-    len_fil = 1;
-    D = 10; % side length of square region
+    dens = 75;  % N * len_fil / A
+    len_fil = 0.1;
+    D = 1; % side length of square region
     nFil = dens * D^2 / len_fil;
-    nFilPerAsterList = ([1:6,8:4:24])'; % "astral number"
+    nFilPerAsterList = ([1:6,8:4:20])'; % "astral number"
     nNetTypes = length(nFilPerAsterList);
     dataStartLine = 6;  % line of first numerical data in report files
     ptsPerFiber = 6;
-    forceVals = (5*(0:3)/3)';
+    forceVals = 0.05*(0:5)';
     nForces = length(forceVals);
     numRep = 10;
-    kbend_list = [1,5*(1:9)];   % [pN*um^2] (units according to Cytosim docs)
+    kbend_list = 0.01 * 2.^(-3:4);   % [pN*um^2] (units according to Cytosim docs)
     nKbend = length(kbend_list);
 
     runsPerKbend = nNetTypes * nForces;
     runsPerRep = nKbend * nNetTypes * nForces;
     shearModuli = zeros(nNetTypes,nKbend,numRep);
+    percStatus = zeros(nNetTypes,nKbend,numRep,2);
     for repIdx = 1:numRep
         for kIdx = 1:nKbend
             for netIdx = 1:nNetTypes
@@ -54,30 +58,36 @@ if newReports
                 kbendShift = (kIdx - 1) * runsPerKbend;
                 repShift = (repIdx - 1) * runsPerRep;
                 trueRunVals = unshiftedRunVals + kbendShift + repShift;
+                % check network percolation status
+                [percTF,~,~] = checkLinks(dir,trueRunVals(1),cytoparams);
+                filtering.spanCheck = percTF(1);
+                percStatus(netIdx,kIdx,repIdx,:) = reshape(percTF,[1,1,1,2]);
+                % analyze network position data
                 [thisInitCoM,thisFinalCoM] = parseForceSweep(dir,trueRunVals, ...
                     cytoparams);
                 initCoMs.(netLabel)(:,:,kIdx,repIdx) = thisInitCoM;
                 finalCoMs.(netLabel)(:,:,kIdx,repIdx) = thisFinalCoM;
                 disps.(netLabel)(:,:,kIdx,repIdx) = thisFinalCoM ...
                     - thisInitCoM;
+                % estimate a modulus
                 [thisModulus,linefit,gof] = getModulus(thisInitCoM, ...
-                    thisFinalCoM,forceVals,"shear");
+                    thisFinalCoM,forceVals,"shear",filtering);
                 shearModuli(netIdx,kIdx,repIdx) = thisModulus;
                 linefits.(netLabel){kIdx,repIdx} = linefit;
                 fitStats.(netLabel){kIdx,repIdx} = gof;
             end
         end
     end
-    save(fullfile(saveDir,"mat_files",simName + ".mat"),'dens','len_fil', ...
+    save(fullfile(saveDir,dataSubdir,simName + ".mat"),'dens','len_fil', ...
         'D','nFil','nFilPerAsterList','forceVals','numRep','nKbend', ...
         'nNetTypes','kbend_list','initCoMs','finalCoMs','disps', ...
-        'linefits','fitStats','shearModuli')
-    clearvars -except simName saveDir
+        'linefits','fitStats','shearModuli','percStatus','filtering')
+    clearvars -except simName saveDir dataSubdir figSubdir
 end
-load(fullfile(saveDir,"mat_files",simName + ".mat"),'dens','len_fil', ...
-        'D','nFil','nFilPerAsterList','forceVals','numRep','nKbend', ...
-        'nNetTypes','kbend_list','initCoMs','finalCoMs','disps', ...
-        'linefits','fitStats','shearModuli')
+load(fullfile(saveDir,dataSubdir,simName + ".mat"),'dens','len_fil', ...
+    'D','nFil','nFilPerAsterList','forceVals','numRep','nKbend', ...
+    'nNetTypes','kbend_list','initCoMs','finalCoMs','disps', ...
+    'linefits','fitStats','shearModuli','percStatus','filtering')
 
 lgray = [197,190,181]/255;
 
@@ -86,7 +96,7 @@ z = norminv(0.975);
 
 %% Modulus vs. kbend, separate axes for each astral number
 
-fig1 = figure(1);
+fig1 = figure(1); clf;
 set(fig1,'units','inches','Position',[0,0,8.5,11])
 fig1 = tiledlayout(2,2);
 tileIdx = 1;
@@ -107,14 +117,14 @@ for netIdx = 1:nNetTypes
     xscale('linear')
 
     if netIdx == 4
-        exportgraphics(fig1,fullfile(saveDir,"exploratory_figures", ...
+        exportgraphics(fig1,fullfile(saveDir,figSubdir, ...
             simName + ".pdf"),"ContentType",'vector');
         clf(fig1)
         set(fig1,'units','inches','Position',[0,0,8.5,11])
         fig1 = tiledlayout(2,2);
         tileIdx = 0;
     elseif netIdx == 8 || netIdx == 11
-        exportgraphics(fig1,fullfile(saveDir,"exploratory_figures", ...
+        exportgraphics(fig1,fullfile(saveDir,figSubdir, ...
             simName + ".pdf"),"ContentType",'vector','Append',true);
         clf(fig1)
         set(fig1,'units','inches','Position',[0,0,8.5,11])
@@ -127,7 +137,7 @@ close(1)
 
 %% Modulus vs. astral number, family of curves (kbend)
 
-fig2 = figure(2);
+fig2 = figure(2); clf;
 set(fig2,'units','inches','Position',[0,0,6,6])
 cmap = colormap(parula(nKbend));
 hold on
@@ -143,5 +153,5 @@ xticks(nFilPerAsterList)
 ylabel('Shear modulus [pN/{\mu}m]')
 yl = ylim;
 ylim([0,yl(2)])
-exportgraphics(fig2,fullfile(saveDir,"exploratory_figures", ...
+exportgraphics(fig2,fullfile(saveDir,figSubdir, ...
     simName + "_kbendfam.pdf"),'ContentType','vector')

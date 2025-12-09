@@ -1,7 +1,6 @@
 % Shear an astral network (force sweep w/ manually set random seeds)
-% Brady Berg, 2025-11-25
+% Brady Berg, 2025-10-14
 % (systematic rescaling based on fil_len, k_bend, viscosity)
-% filament bending rigidity sweep
 set simul system
 {
     time_step = 0.1
@@ -25,10 +24,9 @@ new cell
 
 [[fiber_len = 0.1]]
 % old 1 --> new 0.1 [um]
-[[kbend = [0.01 * 2**i for i in range(-3,5)]]]
 set fiber actin
 {
-    rigidity       = [[kbend]]
+    rigidity       = 0.01
     segmentation   = [[fiber_len/5]]
     confine        = off %inside,200
     min_length     = [[fiber_len]]  
@@ -96,7 +94,7 @@ set aster actinNode
 % target density N*fiber_len / A: [[dens]]
 [[nFil = round(dens * s**2 / fiber_len)]]
 % target number of filaments: [[nFil]]
-[[nFilPerAster = [1,2,3,4,5,6,8,12,16,20]]]
+[[nFilPerAster = list(range(1,25))]]
 [[nAsters = round(nFil/nFilPerAster)]]
 new [[nAsters]] actinNode
 {

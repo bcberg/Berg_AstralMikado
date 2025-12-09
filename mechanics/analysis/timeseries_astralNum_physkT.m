@@ -1,4 +1,4 @@
-% timeseries_astralNum.m
+% timeseries_astralNum_physkT.m
 % Brady Berg
 clear
 close all
@@ -7,16 +7,16 @@ format compact
 
 %% Parse report files
 
-simName = "timeseries_astralNum251014";
+simName = "timeseries_astralNum_physkT251113";
 
 % Ubuntu paths
 saveDir = '~/Documents/astral-mikado-data';
 % Windows paths
 % saveDir = 'C:\Users\bcber\Documents\astral-mikado-data';
 
-newReports = false;
+newReports = true;
 if newReports
-    dir = "~/Documents/AstralMikadoCYM/runs/timeseries_astralNum/";
+    dir = "~/Documents/AstralMikadoCYM/runs/timeseries_astralNum_physkT/";
 
     % ensure parameters match with timeseries_check.cym.tpl & driver
     dens = 75;  % N * len_fil / A
@@ -29,8 +29,8 @@ if newReports
     ptsPerFiber = 6;
     frameVals = (0:400)';   % CHECK - USING REPORTF
     secsPerFrame = 1;       % CHECK REPORT FILES TO CONFIRM
-    shearForce = 0.25; % [pN]
-    tensForce = 1; % [pN]
+    shearForce = 1.25; % [pN]
+    tensForce = 5; % [pN]
 
     netLabelPat = 'an%02d';
     % analyze shear runs
@@ -71,7 +71,7 @@ load(fullfile(saveDir,'mat_files',simName + ".mat"), ...
 % shear
 fig1 = figure(1); clf;
 set(fig1,'units','centimeters','Position',[1,1,20,10], ...
-    'defaultLineLineWidth',0.75)
+    'defaultLineLineWidth',0.75,'defaultTextInterpreter','tex')
 fig1 = tiledlayout(fig1,1,2);
 nexttile(1)
 hold on
@@ -80,10 +80,10 @@ for netIdx = 1:nNetTypes
     theseCoMs = shearCoMs.(netLabel);
     plot(frameVals*secsPerFrame,theseCoMs(:,1),'DisplayName',netLabel)
 end
-ylims = ylim(gca);
-plot(10*[5,5], ylims, '--k', 'DisplayName',sprintf("%1.2f pN applied", ...
-    shearForce))
-plot(10*[30,30], ylims, '-k', 'DisplayName', 'Final pos. sample')
+xline(41,'--k')
+xline(50,'--k','DisplayName',sprintf("%1.2f pN applied",shearForce))
+xline(291,'-k')
+xline(300,'-k','DisplayName','Final pos. sample')
 hold off
 xlim('tight')
 xlabel('Time [s]')
@@ -98,9 +98,10 @@ for netIdx = 1:nNetTypes
     theseCoMs = shearCoMs.(netLabel);
     plot(frameVals*secsPerFrame,theseCoMs(:,2))
 end
-ylims = ylim(gca);
-plot(10*[5,5], ylims, '--k')
-plot(10*[30,30], ylims, '-k')
+xline(41,'--k')
+xline(50,'--k','DisplayName',sprintf("%1.2f pN applied",shearForce))
+xline(291,'-k')
+xline(300,'-k','DisplayName','Final pos. sample')
 hold off
 xlim('tight')
 xlabel('Time [s]')
@@ -112,7 +113,7 @@ exportgraphics(fig1,fullfile(saveDir,'exploratory_figures',simName + ...
 % tensile
 fig2 = figure(2); clf;
 set(fig2,'units','centimeters','Position',[1,1,20,10], ...
-    'defaultLineLineWidth',0.75)
+    'defaultLineLineWidth',0.75,'defaultTextInterpreter','tex')
 fig2 = tiledlayout(fig2,1,2);
 nexttile(1)
 hold on
@@ -121,10 +122,10 @@ for netIdx = 1:nNetTypes
     theseCoMs = tensCoMs.(netLabel);
     plot(frameVals*secsPerFrame,theseCoMs(:,1),'DisplayName',netLabel)
 end
-ylims = ylim(gca);
-plot(10*[5,5], ylims, '--k', 'DisplayName', sprintf("%1.1f pN applied", ...
-    tensForce))
-plot(10*[30,30], ylims, '-k', 'DisplayName', 'Final pos. sample')
+xline(41,'--k')
+xline(50,'--k','DisplayName',sprintf("%1.2f pN applied",shearForce))
+xline(291,'-k')
+xline(300,'-k','DisplayName','Final pos. sample')
 hold off
 xlim('tight')
 xlabel('Time [s]')
@@ -139,9 +140,10 @@ for netIdx = 1:nNetTypes
     theseCoMs = tensCoMs.(netLabel);
     plot(frameVals*secsPerFrame,theseCoMs(:,2))
 end
-ylims = ylim(gca);
-plot(10*[5,5], ylims, '--k')
-plot(10*[30,30], ylims, '-k')
+xline(41,'--k')
+xline(50,'--k','DisplayName',sprintf("%1.2f pN applied",shearForce))
+xline(291,'-k')
+xline(300,'-k','DisplayName','Final pos. sample')
 hold off
 xlim('tight')
 xlabel('Time [s]')

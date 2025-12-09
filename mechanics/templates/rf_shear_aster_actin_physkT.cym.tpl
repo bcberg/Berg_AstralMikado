@@ -1,12 +1,12 @@
 % Shear an astral network (force sweep w/ manually set random seeds)
-% Brady Berg, 2025-11-25
+% Brady Berg, 2025-10-23
 % (systematic rescaling based on fil_len, k_bend, viscosity)
-% filament bending rigidity sweep
+% using physiological kBT value
 set simul system
 {
     time_step = 0.1
     viscosity = 0.5     % old 0.01 --> new 0.5 [pN*s/um^2]
-    kT = [[0.0042/200]] % reduce default value by 200-fold (pN*um scale factor rel. to old params)
+    kT = 0.0042
     verbose = 0
     % number of replicates (different seeds) specified in run_rep_full_shear_aster.sh
     random_seed = [[random.randint(0,10**9)]]
@@ -25,10 +25,9 @@ new cell
 
 [[fiber_len = 0.1]]
 % old 1 --> new 0.1 [um]
-[[kbend = [0.01 * 2**i for i in range(-3,5)]]]
 set fiber actin
 {
-    rigidity       = [[kbend]]
+    rigidity       = 0.01
     segmentation   = [[fiber_len/5]]
     confine        = off %inside,200
     min_length     = [[fiber_len]]  
@@ -79,10 +78,18 @@ set single temp_pivot
     activity = fixed
 }
 
+% initialize asters
+[[dens = 75]]
+% target density N*fiber_len / A: [[dens]]
+[[nFil = round(dens * s**2 / fiber_len)]]
+% target number of filaments: [[nFil]]
+[[nFilPerAster = list(range(1,25))]]
+[[nAsters = round(nFil/nFilPerAster)]]
+
 % for visualizing center of asters
 set solid core
 {
-    display = ( style=1; color=(1 0 0 0.33); size=1;) % (r g b a) where a \in [0,1] is transparency
+    display = ( style=1; color=(1 0 0 [[0.33 * (nFilPerAster != 1)]]); size=1;) % (r g b a) where a \in [0,1] is transparency
 }
 
 set aster actinNode
@@ -91,13 +98,6 @@ set aster actinNode
 
 }
 
-% initialize asters
-[[dens = 75]]
-% target density N*fiber_len / A: [[dens]]
-[[nFil = round(dens * s**2 / fiber_len)]]
-% target number of filaments: [[nFil]]
-[[nFilPerAster = [1,2,3,4,5,6,8,12,16,20]]]
-[[nAsters = round(nFil/nFilPerAster)]]
 new [[nAsters]] actinNode
 {
     type = astral % fibers are anchored at random positions near the center, pointing outward
@@ -174,11 +174,18 @@ new [[round(100*s)]] crosslinker {attach1 = base_fiber}
 % run system with no force; allows crosslinkers to bind
 run system
 {
-    nb_steps = 500
-    nb_frames = 5
+    nb_steps = 400
+    nb_frames = 4   % frame 0 + frames 1-4; times 0s + 10s, 20s, 30s, 40s
 }
 
-[[F = [0.05 * x for x in range(6)]]]
+run system
+{
+    nb_steps = 100
+    % average positions from these frames to get initial position (after crosslinkers bind)
+    nb_frames = 10  % frames 5-14, times 41s, 42s, ..., 50s
+}
+
+[[F = [0.25 * x for x in range(6)]]]
 % [[F]]
 % activate applied force!
 change fiber rforced_fiber
@@ -188,16 +195,18 @@ change fiber rforced_fiber
 % remove anchors on rforced_fiber
 delete 3 temp_pivot
 
-% report "initial" network position (after crosslinkers have bound)
-report fiber:point initial_pos.txt
 % report states of crosslinkers to determine network connectivity
 report couple:link links.txt
 
 run system
 {
-    nb_steps = 2500
-    nb_frames = 25
+    nb_steps = 2400
+    nb_frames = 24  % frames 15-38, times 60s, 70s, ..., 290s
 }
 
-% report final network position
-report fiber:point final_pos.txt
+run system
+{
+    nb_steps = 100
+    % average positions from these frames to get final position (after system equilibrates)
+    nb_frames = 10  % frames 39-48, times 291s, 292s, ..., 300s
+}

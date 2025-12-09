@@ -1,15 +1,16 @@
-% Shear an "original" Mikado network
+% Shear/apply tension to Astral Mikado networks
 % --> for plotting timeseries of deformation and making movies
-% Brady Berg, 2025-04-03
+% Brady Berg, 2025-10-14
 
-include display.cyp { required=0 }
-
-[[Fvec = [(0,0,5,0), (0,10,0,10)]]]
+% max shear force in sweeps: 0.25 pN
+% max tension in sweeps: 1 pN
+[[Fvec = [(0,0,0.25,0), (0,0.5,0,0.5)]]]
 
 set simul system
 {
-    time_step = 0.01
-    viscosity = 0.01
+    time_step = 0.1
+    viscosity = 0.5
+    kT = [[0.0042/200]]
     verbose = 0
     random_seed = [[random.randint(0,10**9)]]
 }
@@ -19,39 +20,39 @@ set space cell
     shape = rectangle
 }
 
-[[D = 10]]
+[[s = 1]]
 new cell
 {
-    length = [[D]],[[D]] 
+    length = [[s]],[[s]] 
 }
 
-[[fiber_len = 1]]
+[[fiber_len = 0.1]]
 set fiber actin
 {
-    rigidity       = 20
+    rigidity       = 0.01
     segmentation   = [[fiber_len / 5]]
     confine        = off %inside,200
-    min_length     = 0.5  
+    min_length     = [[fiber_len]]  
     activity       = none
 }
 
 % force will be applied to this fiber type
 set fiber forced_fiber
 {
-    rigidity = 1e6
-    segmentation = 0.5
+    rigidity = 500
+    segmentation = 0.05
     confine = off %inside,200
-    min_length = [[D]]
+    min_length = [[s]]
     activity = none
 }
 
 % fiber type to be anchored to the bottom of simulation space
 set fiber base_fiber
 {
-    rigidity = 1e6
-    segmentation = 0.5
+    rigidity = 500
+    segmentation = 0.05
     confine = off %inside,200
-    min_length = [[D]]
+    min_length = [[s]]
     activity = none
 }
 
@@ -59,100 +60,115 @@ set fiber base_fiber
 set hand strong_hand
 {
     unbinding_rate = 0
-    unbinding_force = 1e6
+    unbinding_force = inf
     display = ( size = 10; color=blue)
 }
 
 set single pivot
 {
     hand = strong_hand
-    stiffness = 1000
+    stiffness = 500
+    activity = fixed
+}
+
+set single temp_pivot
+{
+    hand = strong_hand
+    stiffness = 500
     activity = fixed
 }
 
 % for visualizing center of asters
 set solid core
 {
-    display = ( style=4 ; color=red; )
+    display = ( style=1; color=(1 0 0 0.33); size=1; ) % (r g b alpha)
 }
 
 set aster actinNode
 {
-    stiffness = 1000, 500   % I'm not sure what these do, but they match the default in `aster.cym`
+    stiffness = 500, 250 
 }
 
+include display.cyp { required=0 }
+
 % initialize asters
-[[dens = 7.5]]
+[[dens = 75]]
 % target density N*fiber_len / A: [[dens]]
-[[nFil = round(dens * D**2 / fiber_len)]]
+[[nFil = round(dens * s**2 / fiber_len)]]
 % target number of filaments: [[nFil]]
 [[nFilPerAster = [1,4,8,16]]]
 [[nAsters = round(nFil/nFilPerAster)]]
 new [[nAsters]] actinNode
 {
+    type = astral
     solid = core
-    radius = 0.3
-    point1 = center, 0.3
+    radius = 0.03
+    % point1 = center, 0.3
     fibers = [[nFilPerAster]], actin, ( length = [[fiber_len]];  end_state = static,static;)
 }
 
 % initialize fibers at top and bottom of simulation space
 new 1 forced_fiber
 {
-    length = [[D]]
-    position = 0 [[D/2 - 0.01]] 0
+    length = [[s]]
+    position = 0 [[s/2 - 0.001]] 0
     orientation = 1 0 0     % "point" fiber to the right
+     % Temporarily anchor rforced_fiber while network crosslinks
+    % syntax: `attach# = [object], [distance from reference to other end], [reference]
+    attach1 = temp_pivot, 0, minus_end
+    attach2 = temp_pivot, [[s/2]], minus_end
+    attach3 = temp_pivot, 0, plus_end
 }
 
 new 1 base_fiber
 {
-    length = [[D]]
-    position = 0 [[-D/2 + 0.01]] 0
+    length = [[s]]
+    position = 0 [[-s/2 + 0.001]] 0
     orientation = -1 0 0    % "point" fiber to the left
     % syntax below is `attach# = [object] [distance from reference to other end] [reference]
     attach1 = pivot, 0, minus_end
-    attach2 = pivot, [[D/10]], minus_end
-    attach3 = pivot, [[2*D/10]], minus_end
-    attach4 = pivot, [[3*D/10]], minus_end
-    attach5 = pivot, [[4*D/10]], minus_end
-    attach6 = pivot, [[5*D/10]], minus_end
-    attach7 = pivot, [[6*D/10]], minus_end
-    attach8 = pivot, [[7*D/10]], minus_end
-    attach9 = pivot, [[8*D/10]], minus_end
-    attach10 = pivot, [[9*D/10]], minus_end
+    attach2 = pivot, [[s/10]], minus_end
+    attach3 = pivot, [[2*s/10]], minus_end
+    attach4 = pivot, [[3*s/10]], minus_end
+    attach5 = pivot, [[4*s/10]], minus_end
+    attach6 = pivot, [[5*s/10]], minus_end
+    attach7 = pivot, [[6*s/10]], minus_end
+    attach8 = pivot, [[7*s/10]], minus_end
+    attach9 = pivot, [[8*s/10]], minus_end
+    attach10 = pivot, [[9*s/10]], minus_end
     attach11 = pivot, 0, plus_end
 }
 
 % define crosslinkers
 set hand binder
 {
-	binding_rate = 10
-	binding_range = 0.01
+	binding_rate = 1
+	binding_range = 0.001
 	unbinding_rate = 0
-    display = (size = 6; color = yellow)
+    display = {width = 10; color = (1 1 0)}
 }
 set couple crosslinker
 {
 	hand1 = binder
 	hand2 = binder
-	stiffness = 100
-	diffusion = 10
+	stiffness = 50
+	diffusion = 1
 }
-new [[30*nFil]] crosslinker
+new [[30*nFil]] crosslinker {attach1 = actin}
 
 % place crosslinkers near top and bottom to ensure
 % they connect to the top and bottom filaments
-new [[10*D]] crosslinker 
-{
-    position = surface
-    placement = surface,, (y > [[D/2 - 0.01]])
-}
+new [[round(100*s)]] crosslinker {attach1 = forced_fiber}
+% {
+%     position = surface
+%     placement = surface,, (y > [[s/2 - 0.01]])
+% }
 
-new [[10*D]] crosslinker 
-{
-    position = surface
-    placement = surface,, (y < [[-D/2 + 0.01]])
-}
+new [[round(100*s)]] crosslinker {attach1 = base_fiber}
+% {
+%     position = surface
+%     placement = surface,, (y < [[-s/2 + 0.01]])
+% }
 
 % run system with no force; allows crosslinkers to bind
 run system
@@ -168,11 +184,13 @@ change fiber forced_fiber
     minus_end_force = [[Fvec[0]]] [[Fvec[1]]]
     plus_end_force = [[Fvec[2]]] [[Fvec[3]]]
 }
+% remove anchors on forced_fiber
+delete 3 temp_pivot
 
 run system
 {
-    nb_steps = 6000
-    nb_frames = 600 % note: 10x higher framerate than standard sims
+    nb_steps = 3500
+    nb_frames = 350 % note: 10x higher framerate than standard sims
 }
 
 % report, framewise, network position over entire simulation -> needs to be done outside of .cym

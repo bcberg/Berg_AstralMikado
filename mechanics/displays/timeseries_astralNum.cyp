@@ -4,7 +4,7 @@
 set actin display
 {
     line_width = 5;
-    color = (1 1 1 1); % light gray
+    color = (1 1 1 1); % white
 }
 
 set forced_fiber display

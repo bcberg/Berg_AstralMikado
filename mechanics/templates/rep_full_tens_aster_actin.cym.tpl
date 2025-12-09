@@ -1,11 +1,10 @@
-% Shear an astral network (force sweep w/ manually set random seeds)
-% Brady Berg, 2025-11-25
+% Apply tension to an astral network (force sweep w/ manually set random seeds)
+% Brady Berg, 2025-10-14
 % (systematic rescaling based on fil_len, k_bend, viscosity)
-% filament bending rigidity sweep
 set simul system
 {
     time_step = 0.1
-    viscosity = 0.5     % old 0.01 --> new 0.5 [pN*s/um^2]
+    viscosity = 0.5
     kT = [[0.0042/200]] % reduce default value by 200-fold (pN*um scale factor rel. to old params)
     verbose = 0
     % number of replicates (different seeds) specified in run_rep_full_shear_aster.sh
@@ -24,11 +23,9 @@ new cell
 }
 
 [[fiber_len = 0.1]]
-% old 1 --> new 0.1 [um]
-[[kbend = [0.01 * 2**i for i in range(-3,5)]]]
 set fiber actin
 {
-    rigidity       = [[kbend]]
+    rigidity       = 0.01
     segmentation   = [[fiber_len/5]]
     confine        = off %inside,200
     min_length     = [[fiber_len]]  
@@ -36,7 +33,7 @@ set fiber actin
 }
 
 % force will be applied to this fiber type
-set fiber rforced_fiber
+set fiber forced_fiber
 {
     rigidity = 500
     segmentation = 0.05
@@ -96,7 +93,7 @@ set aster actinNode
 % target density N*fiber_len / A: [[dens]]
 [[nFil = round(dens * s**2 / fiber_len)]]
 % target number of filaments: [[nFil]]
-[[nFilPerAster = [1,2,3,4,5,6,8,12,16,20]]]
+[[nFilPerAster = list(range(1,25))]]
 [[nAsters = round(nFil/nFilPerAster)]]
 new [[nAsters]] actinNode
 {
@@ -109,12 +106,12 @@ new [[nAsters]] actinNode
 }
 
 % initialize fibers at top and bottom of simulation space
-new 1 rforced_fiber
+new 1 forced_fiber
 {
     length = [[s]]
-    position = 0 [[s/2 - 0.001]] 0
+    position = 0 [[s/2 - 0.01]] 0
     orientation = 1 0 0     % "point" fiber to the right
-    % Temporarily anchor rforced_fiber while network crosslinks
+    % Temporarily anchor forced_fiber while network crosslinks
     % syntax: `attach# = [object], [distance from reference to other end], [reference]
     attach1 = temp_pivot, 0, minus_end
     attach2 = temp_pivot, [[s/2]], minus_end
@@ -124,7 +121,7 @@ new 1 rforced_fiber
 new 1 base_fiber
 {
     length = [[s]]
-    position = 0 [[-s/2 + 0.001]] 0
+    position = 0 [[-s/2 + 0.01]] 0
     orientation = -1 0 0    % "point" fiber to the left
     % syntax: `attach# = [object], [distance from reference to other end], [reference]
     attach1 = pivot, 0, minus_end
@@ -159,7 +156,7 @@ new [[30*nFil]] crosslinker {attach1 = actin}
 
 % place crosslinkers near top and bottom to ensure
 % they connect to the top and bottom filaments
-new [[round(100*s)]] crosslinker {attach1 = rforced_fiber}
+new [[round(100*s)]] crosslinker {attach1 = forced_fiber}
 % {
 %     position = surface
 %     placement = surface,, (y > [[s/2 - 0.01]])
@@ -178,12 +175,13 @@ run system
     nb_frames = 5
 }
 
-[[F = [0.05 * x for x in range(6)]]]
+[[F = [0.2 * x for x in range(6)]]]
 % [[F]]
 % activate applied force!
-change fiber rforced_fiber
+change fiber forced_fiber
 {
-    plus_end_force = [[F]] 0        % rightward force applied to plus end of fiber
+    plus_end_force = 0 [[F/2]]
+    minus_end_force = 0 [[F/2]]
 }
 % remove anchors on rforced_fiber
 delete 3 temp_pivot

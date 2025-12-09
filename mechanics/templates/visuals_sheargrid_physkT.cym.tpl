@@ -1,14 +1,13 @@
 % Shear an astral network (force sweep w/ manually set random seeds)
-% Brady Berg, 2025-11-25
-% (systematic rescaling based on fil_len, k_bend, viscosity)
-% filament bending rigidity sweep
+% --> to produce grid of network snapshots at physiological k_B*T
+% Brady Berg, 2024-12-03
+
 set simul system
 {
     time_step = 0.1
-    viscosity = 0.5     % old 0.01 --> new 0.5 [pN*s/um^2]
-    kT = [[0.0042/200]] % reduce default value by 200-fold (pN*um scale factor rel. to old params)
+    viscosity = 0.5
+    kT = 0.0042
     verbose = 0
-    % number of replicates (different seeds) specified in run_rep_full_shear_aster.sh
     random_seed = [[random.randint(0,10**9)]]
 }
 
@@ -24,26 +23,23 @@ new cell
 }
 
 [[fiber_len = 0.1]]
-% old 1 --> new 0.1 [um]
-[[kbend = [0.01 * 2**i for i in range(-3,5)]]]
 set fiber actin
 {
-    rigidity       = [[kbend]]
-    segmentation   = [[fiber_len/5]]
+    rigidity       = 0.01
+    segmentation   = [[fiber_len / 5]]
     confine        = off %inside,200
     min_length     = [[fiber_len]]  
     activity       = none
 }
 
 % force will be applied to this fiber type
-set fiber rforced_fiber
+set fiber forced_fiber
 {
     rigidity = 500
     segmentation = 0.05
     confine = off %inside,200
     min_length = [[s]]
     activity = none
-    display = (line_width = 10; color=blue)
 }
 
 % fiber type to be anchored to the bottom of simulation space
@@ -54,7 +50,6 @@ set fiber base_fiber
     confine = off %inside,200
     min_length = [[s]]
     activity = none
-    display = (line_width = 10; color=blue)
 }
 
 % define anchoring object
@@ -82,39 +77,39 @@ set single temp_pivot
 % for visualizing center of asters
 set solid core
 {
-    display = ( style=1; color=(1 0 0 0.33); size=1;) % (r g b a) where a \in [0,1] is transparency
+    display = ( style=1; color=(1 0 0 0.33); size=1; ) % (r g b alpha)
 }
 
 set aster actinNode
 {
-    stiffness = 500, 250   % stiffness1 (pins filament ends at center), stiffness2 (provides torque)
-
+    stiffness = 500, 250 
 }
+
+include display.cyp { required=0 }
 
 % initialize asters
 [[dens = 75]]
 % target density N*fiber_len / A: [[dens]]
 [[nFil = round(dens * s**2 / fiber_len)]]
 % target number of filaments: [[nFil]]
-[[nFilPerAster = [1,2,3,4,5,6,8,12,16,20]]]
+[[nFilPerAster = [1,4,8,16]]]
 [[nAsters = round(nFil/nFilPerAster)]]
 new [[nAsters]] actinNode
 {
-    type = astral % fibers are anchored at random positions near the center, pointing outward
-    % avoids constraint from type 'radial', requiring sep of 25 nm by default
+    type = astral
     solid = core
     radius = 0.03
-    % point1 = center, 0.01
+    % point1 = center, 0.3
     fibers = [[nFilPerAster]], actin, ( length = [[fiber_len]];  end_state = static,static;)
 }
 
 % initialize fibers at top and bottom of simulation space
-new 1 rforced_fiber
+new 1 forced_fiber
 {
     length = [[s]]
     position = 0 [[s/2 - 0.001]] 0
     orientation = 1 0 0     % "point" fiber to the right
-    % Temporarily anchor rforced_fiber while network crosslinks
+     % Temporarily anchor rforced_fiber while network crosslinks
     % syntax: `attach# = [object], [distance from reference to other end], [reference]
     attach1 = temp_pivot, 0, minus_end
     attach2 = temp_pivot, [[s/2]], minus_end
@@ -126,7 +121,7 @@ new 1 base_fiber
     length = [[s]]
     position = 0 [[-s/2 + 0.001]] 0
     orientation = -1 0 0    % "point" fiber to the left
-    % syntax: `attach# = [object], [distance from reference to other end], [reference]
+    % syntax below is `attach# = [object] [distance from reference to other end] [reference]
     attach1 = pivot, 0, minus_end
     attach2 = pivot, [[s/10]], minus_end
     attach3 = pivot, [[2*s/10]], minus_end
@@ -159,7 +154,7 @@ new [[30*nFil]] crosslinker {attach1 = actin}
 
 % place crosslinkers near top and bottom to ensure
 % they connect to the top and bottom filaments
-new [[round(100*s)]] crosslinker {attach1 = rforced_fiber}
+new [[round(100*s)]] crosslinker {attach1 = forced_fiber}
 % {
 %     position = surface
 %     placement = surface,, (y > [[s/2 - 0.01]])
@@ -178,20 +173,18 @@ run system
     nb_frames = 5
 }
 
-[[F = [0.05 * x for x in range(6)]]]
+% report "initial" network position (after crosslinkers have bound)
+report fiber:point initial_pos.txt
+
+[[F = [0, 0.625, 1.25]]]
 % [[F]]
 % activate applied force!
-change fiber rforced_fiber
+change fiber forced_fiber
 {
     plus_end_force = [[F]] 0        % rightward force applied to plus end of fiber
 }
-% remove anchors on rforced_fiber
+% remove anchors on forced_fiber
 delete 3 temp_pivot
-
-% report "initial" network position (after crosslinkers have bound)
-report fiber:point initial_pos.txt
-% report states of crosslinkers to determine network connectivity
-report couple:link links.txt
 
 run system
 {

@@ -7,7 +7,7 @@ function [initCoM, finalCoM] = parseForceSweep(dir,runVals,cytoparams)
 %       runVals (n x 1 double): integer values of the runs which correspond
 %       to a force sweep over one network type
 %       cytoparams (1x1 struct): parameters describing current network
-%       parameters needed as inputs to fiberPointLines function; contains
+%       parameters (needed as inputs to fiberPointLines function); contains
 %       fields nFil, nFilPerAster, dataStartLine, ptsPerFiber
 %   Outputs:
 %       initCoM (n x 2 double): list of center-of-mass coordinates at
