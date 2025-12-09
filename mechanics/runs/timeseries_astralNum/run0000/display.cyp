@@ -1,13 +1,13 @@
-% Display specifications for visuals_crslnkdens
-% Brady Berg, 2025-04-02
+% Display specifications for timeseries_astralNum
+% Brady Berg, 2025-04-03
 
 set actin display
 {
     line_width = 5;
-    color = (1 1 1 1); % white
+    color = (1 1 1 1); % light gray
 }
 
-set rforced_fiber display
+set forced_fiber display
 {
     line_width = 10;
     color = blue;
@@ -28,8 +28,8 @@ set strong_hand display
 set core display
 {
     style = 1;
-    % transparent centers b/c they don't matter
-    color = (1 0 0 0.0); % (r g b a) where a \in [0,1] is transparency
+    % transparent centers because they are irrelevant for a_n=1
+    color = (1 0 0 0); % (r g b a) where a \in [0,1] is transparency
     size = 1;
 }
 

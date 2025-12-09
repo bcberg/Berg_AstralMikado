@@ -35,6 +35,6 @@ set core display
 set binder display
 {
     % yellow crosslinkers
-    color = (1 1 0); % cyan crosslinkers
+    color = (1 1 0);
     width = 10;
 }

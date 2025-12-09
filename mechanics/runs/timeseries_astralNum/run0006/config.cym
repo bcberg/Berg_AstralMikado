@@ -1,17 +1,18 @@
-% Shear an "original" Mikado network
+% Shear Astral Mikado networks
 % --> for plotting timeseries of deformation and making movies
-% Brady Berg, 2025-04-03
+% Brady Berg, 2025-10-14
 
-include display.cyp { required=0 }
-
+% max shear force in sweeps: 0.25 pN
+% max tension in sweeps: 1 pN
 
 
 set simul system
 {
-    time_step = 0.01
-    viscosity = 0.01
+    time_step = 0.1
+    viscosity = 0.5
+    kT = 2.1e-05
     verbose = 0
-    random_seed = 28578473
+    random_seed = 376353655
 }
 
 set space cell
@@ -22,36 +23,36 @@ set space cell
 
 new cell
 {
-    length = 10,10 
+    length = 1,1 
 }
 
 
 set fiber actin
 {
-    rigidity       = 20
-    segmentation   = 0.2
+    rigidity       = 0.01
+    segmentation   = 0.02
     confine        = off %inside,200
-    min_length     = 0.5  
+    min_length     = 0.1  
     activity       = none
 }
 
 % force will be applied to this fiber type
 set fiber forced_fiber
 {
-    rigidity = 1e6
-    segmentation = 0.5
+    rigidity = 500
+    segmentation = 0.05
     confine = off %inside,200
-    min_length = 10
+    min_length = 1
     activity = none
 }
 
 % fiber type to be anchored to the bottom of simulation space
 set fiber base_fiber
 {
-    rigidity = 1e6
-    segmentation = 0.5
+    rigidity = 500
+    segmentation = 0.05
     confine = off %inside,200
-    min_length = 10
+    min_length = 1
     activity = none
 }
 
@@ -59,100 +60,115 @@ set fiber base_fiber
 set hand strong_hand
 {
     unbinding_rate = 0
-    unbinding_force = 1e6
+    unbinding_force = inf
     display = ( size = 10; color=blue)
 }
 
 set single pivot
 {
     hand = strong_hand
-    stiffness = 1000
+    stiffness = 500
+    activity = fixed
+}
+
+set single temp_pivot
+{
+    hand = strong_hand
+    stiffness = 500
     activity = fixed
 }
 
 % for visualizing center of asters
 set solid core
 {
-    display = ( style=4 ; color=red; )
+    display = ( style=1; color=(1 0 0 0.33); size=1; ) % (r g b alpha)
 }
 
 set aster actinNode
 {
-    stiffness = 1000, 500   % I'm not sure what these do, but they match the default in `aster.cym`
+    stiffness = 500, 250 
 }
+
+include display.cyp { required=0 }
 
 % initialize asters
 
-% target density N*fiber_len / A: 7.5
+% target density N*fiber_len / A: 75
 
 % target number of filaments: 750
 
 
 new 94 actinNode
 {
+    type = astral
     solid = core
-    radius = 0.3
-    point1 = center, 0.3
-    fibers = 8, actin, ( length = 1;  end_state = static,static;)
+    radius = 0.03
+    % point1 = center, 0.3
+    fibers = 8, actin, ( length = 0.1;  end_state = static,static;)
 }
 
 % initialize fibers at top and bottom of simulation space
 new 1 forced_fiber
 {
-    length = 10
-    position = 0 4.99 0
+    length = 1
+    position = 0 0.499 0
     orientation = 1 0 0     % "point" fiber to the right
+     % Temporarily anchor rforced_fiber while network crosslinks
+    % syntax: `attach# = [object], [distance from reference to other end], [reference]
+    attach1 = temp_pivot, 0, minus_end
+    attach2 = temp_pivot, 0.5, minus_end
+    attach3 = temp_pivot, 0, plus_end
 }
 
 new 1 base_fiber
 {
-    length = 10
-    position = 0 -4.99 0
+    length = 1
+    position = 0 -0.499 0
     orientation = -1 0 0    % "point" fiber to the left
     % syntax below is `attach# = [object] [distance from reference to other end] [reference]
     attach1 = pivot, 0, minus_end
-    attach2 = pivot, 1.0, minus_end
-    attach3 = pivot, 2.0, minus_end
-    attach4 = pivot, 3.0, minus_end
-    attach5 = pivot, 4.0, minus_end
-    attach6 = pivot, 5.0, minus_end
-    attach7 = pivot, 6.0, minus_end
-    attach8 = pivot, 7.0, minus_end
-    attach9 = pivot, 8.0, minus_end
-    attach10 = pivot, 9.0, minus_end
+    attach2 = pivot, 0.1, minus_end
+    attach3 = pivot, 0.2, minus_end
+    attach4 = pivot, 0.3, minus_end
+    attach5 = pivot, 0.4, minus_end
+    attach6 = pivot, 0.5, minus_end
+    attach7 = pivot, 0.6, minus_end
+    attach8 = pivot, 0.7, minus_end
+    attach9 = pivot, 0.8, minus_end
+    attach10 = pivot, 0.9, minus_end
     attach11 = pivot, 0, plus_end
 }
 
 % define crosslinkers
 set hand binder
 {
-	binding_rate = 10
-	binding_range = 0.01
+	binding_rate = 1
+	binding_range = 0.001
 	unbinding_rate = 0
-    display = (size = 6; color = yellow)
+    display = {width = 10; color = (1 1 0)}
 }
 set couple crosslinker
 {
 	hand1 = binder
 	hand2 = binder
-	stiffness = 100
-	diffusion = 10
+	stiffness = 50
+	diffusion = 1
 }
-new 22500 crosslinker
+new 22500 crosslinker {attach1 = actin}
 
 % place crosslinkers near top and bottom to ensure
 % they connect to the top and bottom filaments
-new 100 crosslinker 
-{
-    position = surface
-    placement = surface,, (y > 4.99)
-}
+new 100 crosslinker {attach1 = forced_fiber}
+% {
+%     position = surface
+%     placement = surface,, (y > 0.49)
+% }
 
-new 100 crosslinker 
-{
-    position = surface
-    placement = surface,, (y < -4.99)
-}
+new 100 crosslinker {attach1 = base_fiber}
+% {
+%     position = surface
+%     placement = surface,, (y < -0.49)
+% }
 
 % run system with no force; allows crosslinkers to bind
 run system
@@ -162,17 +178,19 @@ run system
 }
 
 % apply either a shear or a tensile stress; (minus_x, minus_y, plus_x, plus_y)
-% (0, 10, 0, 10)
+% (0, 0.5, 0, 0.5)
 change fiber forced_fiber
 {
-    minus_end_force = 0 10
-    plus_end_force = 0 10
+    minus_end_force = 0 0.5
+    plus_end_force = 0 0.5
 }
+% remove anchors on forced_fiber
+delete 3 temp_pivot
 
 run system
 {
-    nb_steps = 6000
-    nb_frames = 600 % note: 10x higher framerate than standard sims
+    nb_steps = 3500
+    nb_frames = 350 % note: 10x higher framerate than standard sims
 }
 
 % report, framewise, network position over entire simulation -> needs to be done outside of .cym
