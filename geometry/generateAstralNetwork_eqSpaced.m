@@ -1,6 +1,7 @@
-function [network,crossings,asters] = generateAstralNetwork(numAsters, ...
+function [network,crossings,asters] = generateAstralNetwork_eqSpaced(numAsters, ...
     l,D,astralNum,nodesOnly)
-% GENERATEASTRALNETWORK Constructs an astral network and reports properties
+% GENERATEASTRALNETWORK_EQSPACED Constructs an astral network and reports
+% properties; filaments are equally spaced about centers
 %   Inputs:
 %       numAsters (scalar): (whole) number of asters to distribute
 %       l (scalar): length of individual filament
@@ -31,7 +32,11 @@ if numAsters == 0
         'numAsters must be a positive integer.'])
 end
 asters.centers = D * rand([numAsters,2]);
-asters.orients = 2 * pi * rand([numAsters,astralNum]);
+% equally space filaments about the astral center
+onespacing = (2 * pi / astralNum) * (0:(astralNum-1));
+spacing = repmat(onespacing,[numAsters,1]);
+rotation = repmat(2 * pi * rand([numAsters,1]),[1,astralNum]);
+asters.orients = spacing + rotation;
 [nodes, filCross] = findNodes(asters.centers,asters.orients,l);
 numFil = numAsters * astralNum;
 % aster idx 1 groups filaments 1,2,...,astralNum; and so on

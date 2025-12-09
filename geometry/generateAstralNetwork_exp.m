@@ -1,9 +1,11 @@
-function [network,crossings,asters] = generateAstralNetwork(numAsters, ...
+function [network,crossings,asters] = generateAstralNetwork_exp(numAsters, ...
     l,D,astralNum,nodesOnly)
-% GENERATEASTRALNETWORK Constructs an astral network and reports properties
+% GENERATEASTRALNETWORK_EXP Constructs an astral network and reports
+% properties; filaments have exponentially distributed lengths w/ mean l
 %   Inputs:
 %       numAsters (scalar): (whole) number of asters to distribute
-%       l (scalar): length of individual filament
+%       l (scalar): mean length of filaments; lengths are exponentially
+%       distributed
 %       D (scalar): domain size; asters are distributed in the square
 %       with corners at (0,0) and (D,D)
 %       astralNum (scalar): (whole) number of filaments per aster
@@ -20,10 +22,11 @@ function [network,crossings,asters] = generateAstralNetwork(numAsters, ...
 %           'filCross': see findNodes auxiliary function
 %           'centerCross': which filaments cross at each astral center;
 %           each row represents a center
-%       asters (struct): has fields 'centers', 'orients'
+%       asters (struct): has fields 'centers', 'orients', 'lengths'
 %           'centers': (x,y) coordinates of astral centers
 %           'orients': angles giving each filament's orientation about its
 %           astral center
+%           'lengths': lengths of individual filaments
 %   Note: currently no boundary/edge is constructed, and the implementation
 %   does not store/compile information for running Metropolis-Hastings
 if numAsters == 0
@@ -32,7 +35,8 @@ if numAsters == 0
 end
 asters.centers = D * rand([numAsters,2]);
 asters.orients = 2 * pi * rand([numAsters,astralNum]);
-[nodes, filCross] = findNodes(asters.centers,asters.orients,l);
+asters.lengths = exprnd(l,[numAsters,astralNum]);
+[nodes, filCross] = findNodes(asters);
 numFil = numAsters * astralNum;
 % aster idx 1 groups filaments 1,2,...,astralNum; and so on
 crossings.centerCross = transpose(reshape(1:numFil,[astralNum,numAsters]));
@@ -46,7 +50,7 @@ if nodesOnly
 else
     % full network generation
     [augNodes, springs, ends] = defineSprings(nodes,filCross, ...
-        asters.centers,l,astralNum);
+        asters.centers,asters.lengths,astralNum);
     network.nodes = nodes;
     network.augNodes = augNodes;
     network.springs = springs;
@@ -56,27 +60,31 @@ end
 
 %% Auxiliary functions
 
-function [nodes, filCross] = findNodes(centers,orients,l)
+function [nodes, filCross] = findNodes(asters)
 % FINDNODES identifies where filaments cross and records which filaments
 % crossed 
 % (Note: filaments are indexed as one would read left to right across the
 % rows of 'orients', and each row represents an aster. This function does
 % NOT search for intersections between filaments on the same aster)
 %   Inputs:
-%       centers (numAsters x 2 double): (x,y) coordinates of astral centers
-%       orients (numAsters x astralNum double): angles giving each 
-%       filament's orientation about its astral center
-%       l (scalar): length of individual filament
+%       asters (struct): has fields 'centers', 'orients', 'lengths'
+%           'centers': (x,y) coordinates of astral centers
+%           'orients': angles giving each filament's orientation about its
+%           astral center
+%           'lengths': lengths of individual filaments
 %   Outputs:
 %       nodes (numNodes x 2 double): list of (x,y) coordinates of filament
 %       crossings (EXCLUDING astral centers)
 %       filCross (numNodes x 2 double): list of pairs of filament indices
 %       corresponding to the filaments that cross at a particular node;
 %       listed so that filCross(idx,1) < filCross(idx,2)
-[numAsters, astralNum] = size(orients);
-numFil = numel(orients);
-cosines = cos(orients);
-sines = sin(orients);
+centers = asters.centers;
+lengths = asters.lengths;
+[numAsters, astralNum] = size(asters.orients);
+numFil = numel(asters.orients);
+cosines = cos(asters.orients);
+sines = sin(asters.orients);
+asterReach = max(asters.lengths,[],2);  % longest filament on each aster
 numNodesGuess = 4 * numFil;     % Note: this is an empirical guess!
 nodes = zeros(numNodesGuess,2);
 filCross = zeros(numNodesGuess,2);
@@ -88,23 +96,19 @@ if astralNum == 1
         otherFils = (idx+1):numFil;
         centerSepSQR = sum((repmat(centers(idx,:),[numel(otherFils),1]) - ...
             centers(otherFils,:)).^2, 2);
-        closeEnough = otherFils(centerSepSQR <= (2*l)^2);
+        sepThresh = asterReach(idx) + asterReach(otherFils);
+        closeEnough = otherFils(centerSepSQR <= (sepThresh.^2));
         for jdx = 1:numel(closeEnough)
             filOfJdx = closeEnough(jdx);
-            % legacy code in these comments for readability
-            % A = [cosines(idx), - cosines(filOfJdx);
-            %     sines(idx), - sines(filOfJdx)];
-            % denom = det(A);
-            % b = 1/l * [centers(filOfJdx,1) - centers(idx,1);
-            %     centers(filOfJdx,2) - centers(idx,2)];
-            % t1 = det([b,A(:,2)]) / denom;
-            % t2 = det([A(:,1),b]) / denom;
-            denom = cosines(idx) * (-sines(filOfJdx)) + ...
-                sines(idx)*cosines(filOfJdx);
-            b1 = (centers(filOfJdx,1) - centers(idx,1)) / l;
-            b2 = (centers(filOfJdx,2) - centers(idx,2)) / l;
-            t1 = (b1*(-sines(filOfJdx)) + b2*cosines(filOfJdx)) / denom;
-            t2 = (cosines(idx)*b2 - sines(idx)*b1) / denom;
+            % use Cramer's rule
+            denom = lengths(idx)*cosines(idx) * ...
+                (-lengths(filOfJdx)*sines(filOfJdx)) + ...
+                lengths(idx)*sines(idx) * lengths(filOfJdx)*cosines(filOfJdx);
+            centerDiff = centers(filOfJdx,:) - centers(idx,:);
+            t1 = (centerDiff(1)*(-lengths(filOfJdx)*sines(filOfJdx)) + ...
+                centerDiff(2)*lengths(filOfJdx)*cosines(filOfJdx)) / denom;
+            t2 = (lengths(idx)*cosines(idx) * centerDiff(2) - ...
+                lengths(idx)*sines(idx)*centerDiff(1)) / denom;
             if (abs(t1 - 0.5) <= 0.5) && (abs(t2 - 0.5) <= 0.5)
                 nodeCount = nodeCount + 1;
                 if nodeCount > numNodesGuess
@@ -116,8 +120,8 @@ if astralNum == 1
                     filCross = zeros(numNodesGuess,2);
                     filCross(1:(nodeCount-1),1:2) = oldFilCross;
                 end
-                nodeX = centers(idx,1) + l * cosines(idx) * t1;
-                nodeY = centers(idx,2) + l * sines(idx) * t1;
+                nodeX = centers(idx,1) + lengths(idx) * cosines(idx) * t1;
+                nodeY = centers(idx,2) + lengths(idx) * sines(idx) * t1;
                 nodes(nodeCount,1:2) = [nodeX, nodeY];
                 filCross(nodeCount,1:2) = [idx,filOfJdx];
             end
@@ -131,7 +135,8 @@ elseif astralNum >= 2
         otherAsters = (asterIdx + 1):numAsters;
         centerSepSQR = sum((repmat(centers(asterIdx,:), ...
             [numel(otherAsters),1]) - centers(otherAsters,:)).^2, 2);
-        tooFar = centerSepSQR > (2*l)^2;
+        sepThresh = asterReach(asterIdx) + asterReach(otherAsters);
+        tooFar = centerSepSQR > (sepThresh.^2);
         % start second loop at first filament on the next aster
         for jdx = (1 + asterIdx*astralNum):numFil
             asterJdx = 1 + floor((jdx-1)/astralNum);
@@ -143,22 +148,18 @@ elseif astralNum >= 2
             % otherwise, check for intersection
             filSubIdx = mod(idx,astralNum) + astralNum * (mod(idx,astralNum)==0);
             filSubJdx = mod(jdx,astralNum) + astralNum * (mod(jdx,astralNum)==0);
-            % legacy code in these comments for readability
-            % A = [cosines(asterIdx,filSubIdx), - cosines(asterJdx,filSubJdx);
-            %     sines(asterIdx,filSubIdx), - sines(asterJdx,filSubJdx)];
-            % denom = det(A);
-            % b = 1/l * [centers(asterJdx,1) - centers(asterIdx,1);
-            %     centers(asterJdx,2) - centers(asterIdx,2)];
-            % t1 = det([b,A(:,2)]) / denom;
-            % t2 = det([A(:,1),b]) / denom;
-            denom = cosines(asterIdx,filSubIdx)*(-sines(asterJdx,filSubJdx)) + ...
-                sines(asterIdx,filSubIdx)*cosines(asterJdx,filSubJdx);
-            b1 = (centers(asterJdx,1) - centers(asterIdx,1)) / l;
-            b2 = (centers(asterJdx,2) - centers(asterIdx,2)) / l;
-            t1 = (b1*(-sines(asterJdx,filSubJdx)) + ...
-                b2*cosines(asterJdx,filSubJdx)) / denom;
-            t2 = (cosines(asterIdx,filSubIdx)*b2 - ...
-                sines(asterIdx,filSubIdx)*b1) / denom;
+            % use Cramer's rule
+            denom = lengths(asterIdx,filSubIdx)*cosines(asterIdx,filSubIdx) * ...
+                (-lengths(asterJdx,filSubJdx)*sines(asterJdx,filSubJdx)) + ...
+                lengths(asterIdx,filSubIdx)*sines(asterIdx,filSubIdx)* ...
+                lengths(asterJdx,filSubJdx)*cosines(asterJdx,filSubJdx);
+            centerDiff = centers(asterJdx,:) - centers(asterIdx,:);
+            t1 = (centerDiff(1)*(-lengths(asterJdx,filSubJdx)*...
+                sines(asterJdx,filSubJdx)) + centerDiff(2)*...
+                lengths(asterJdx,filSubJdx)*cosines(asterJdx,filSubJdx)) / denom;
+            t2 = (lengths(asterIdx,filSubIdx)*cosines(asterIdx,filSubIdx)*...
+                centerDiff(2) - lengths(asterIdx,filSubIdx)*...
+                sines(asterIdx,filSubIdx)*centerDiff(1)) / denom;
             if (abs(t1 - 0.5) <= 0.5) && (abs(t2 - 0.5) <= 0.5)
                 nodeCount = nodeCount + 1;
                 if nodeCount > numNodesGuess
@@ -170,8 +171,10 @@ elseif astralNum >= 2
                     filCross = zeros(numNodesGuess,2);
                     filCross(1:(nodeCount-1),1:2) = oldFilCross;
                 end
-                nodeX = centers(asterIdx,1) + l * cosines(asterIdx,filSubIdx) * t1;
-                nodeY = centers(asterIdx,2) + l * sines(asterIdx,filSubIdx) * t1;
+                nodeX = centers(asterIdx,1) + lengths(asterIdx,filSubIdx) *...
+                    cosines(asterIdx,filSubIdx) * t1;
+                nodeY = centers(asterIdx,2) + lengths(asterIdx,filSubIdx) *...
+                    sines(asterIdx,filSubIdx) * t1;
                 nodes(nodeCount,1:2) = [nodeX, nodeY];
                 filCross(nodeCount,1:2) = [idx,jdx];
             end
@@ -226,7 +229,7 @@ nodeOrdering = nodesOnFil(I);
 end
 
 function [augNodes,springs,ends] = defineSprings(nodes,filCross,centers, ...
-    l,astralNum)
+    lengths,astralNum)
 % DEFINESPRINGS partitions filaments into node-bounded sub-segments 
 % (springs) and dangling ends
 %   Inputs:
@@ -236,7 +239,7 @@ function [augNodes,springs,ends] = defineSprings(nodes,filCross,centers, ...
 %       corresponding to the filaments that cross at a particular node;
 %       listed so that filCross(idx,1) < filCross(idx,2)
 %       centers (numAsters x 2 double): (x,y) coordinates of astral centers
-%       l (scalar): length of individual filament
+%       lengths (numAsters x astralNum double): lengths of individual filaments
 %       astralNum (scalar): number of filaments per aster
 %   Outputs:
 %       augNodes (numAsters+numNodes x 2 double)**: conditionally augmented 
@@ -270,13 +273,13 @@ if astralNum == 1
         asterIdx = idx;
         if isempty(thisOrder)
             % 0 nodes = filament doesn't touch any other asters!
-            ends(idx,2) = l;    % treat unused filament as "right" dangling end
+            ends(idx,2) = lengths(idx);    % treat unused filament as "right" dangling end
         elseif isscalar(thisOrder)
             % 1 node + astralNum == 1 -> two dangling ends
             r0 = centers(asterIdx,:);
             nodeCoords = nodes(thisOrder(1),:);
             ends(idx,1) = sqrt(sum( (nodeCoords - r0).^2 ));
-            ends(idx,2) = l - ends(idx,2);
+            ends(idx,2) = lengths(idx) - ends(idx,2);
         elseif ~isscalar(thisOrder) && isvector(thisOrder)
             % >=2 nodes = there are certainly springs along this filament
             r0 = centers(asterIdx,:);
@@ -296,7 +299,7 @@ if astralNum == 1
             end
             proxNode = nodes(thisOrder(1),:);
             ends(idx,1) = sqrt(sum( (proxNode - r0).^2 ));
-            ends(idx,2) = l - totSpringLength - ends(idx,1);
+            ends(idx,2) = lengths(idx) - totSpringLength - ends(idx,1);
         end
     end
 elseif astralNum >= 2
@@ -305,9 +308,10 @@ elseif astralNum >= 2
     for idx = 1:numFil
         thisOrder = sortNodes(idx,nodes,filCross,centers,astralNum);
         asterIdx = 1 + floor((idx-1)/astralNum);
+        filSubIdx = mod(idx,astralNum) + astralNum * (mod(idx,astralNum)==0);
         if isempty(thisOrder)
             % 0 nodes = filament doesn't touch any other asters!
-            ends(idx,2) = l;    % treat unused filament as "right" dangling end
+            ends(idx,2) = lengths(asterIdx,filSubIdx);    % treat unused filament as "right" dangling end
         elseif isscalar(thisOrder)
             % 1 node + astralNum >=2 -> spring between astral center & node
             springCount = springCount + 1;
@@ -316,7 +320,7 @@ elseif astralNum >= 2
             springLength = sqrt(sum( (nodeCoords - r0).^2 ));
             newSpring = [asterIdx, numAsters+thisOrder, idx, springLength];
             springs(springCount,:) = newSpring;
-            ends(idx,2) = l - springLength;
+            ends(idx,2) = lengths(asterIdx,filSubIdx) - springLength;
         elseif ~isscalar(thisOrder) && isvector(thisOrder)
             % >=2 nodes = there are certainly springs along this filament
             r0 = centers(asterIdx,:);
@@ -342,7 +346,7 @@ elseif astralNum >= 2
             newSpring = [asterIdx, numAsters+thisOrder(1), idx, springLength];
             springs(springCount,:) = newSpring;
             totSpringLength = totSpringLength + springLength;
-            ends(idx,2) = l - totSpringLength;
+            ends(idx,2) = lengths(asterIdx,filSubIdx) - totSpringLength;
         end
     end
 end

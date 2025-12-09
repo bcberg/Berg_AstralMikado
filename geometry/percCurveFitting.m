@@ -278,5 +278,6 @@ if makeSmsplFitsFig
             'visible','off')
     end
     save(fullfile(saveDir,matFileSubDir,'percMCRG_nonparamFits_tzOnly.mat'), ...
-        'smsplFits','Dlist','percDataUsed')
+        'smsplFits','Dlist','percDataUsed','numNetTypes','numPercTypes', ...
+        'numD','allAstralNums','allCurves')
 end
