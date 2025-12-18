@@ -1,4 +1,5 @@
-function [percTF,percStats,filCross] = checkLinks(runDir,runIdx,cytoparams)
+function [percTF,percStats,filCross] = checkLinks(runDir,runIdx,cytoparams, ...
+    runFolderDigits)
 %CHECKLINKS analyzes the percolation state of a network from Cytosim
 %   Inputs:
 %       runDir (char vector or string): full filepath to directory which
@@ -9,6 +10,8 @@ function [percTF,percStats,filCross] = checkLinks(runDir,runIdx,cytoparams)
 %       cytoparams (1x1 struct): parameters describing current network
 %       parameters (needed to calculate filament quantities/indices); 
 %       contains fields nFil, nFilPerAster, dataStartLine, ptsPerFiber
+%       runFolderDigits (scalar integer): either 4 or 5; specifies width of
+%       digits in run folder naming scheme
 %   Outputs:
 %       percTF (1 x 2 logical): true/false values from the following tests:
 %           (1): spanning check; do the base and forced filament belong to
@@ -37,7 +40,8 @@ centerCross = transpose(reshape(1:howManyFibers, ...
     [cytoparams.nFilPerAster,howManyAsters]));
 
 % parse run%04d/links.txt
-runCode = sprintf('run%04d',runIdx);
+runFmt = sprintf('run%%0%dd',runFolderDigits);
+runCode = sprintf(runFmt,runIdx);
 filename = fullfile(runDir,runCode,'links.txt');
 % find which lines contain the crosslinker data
 firstCrosslinkerLine = 5;   % structural property of report files

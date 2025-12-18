@@ -49,7 +49,7 @@ if newReports
         unshiftedRunVals = (netIdx - 1)*nForces:(netIdx * nForces - 1);
         theseRunVals = (repIdx - 1) * runsPerRep + unshiftedRunVals;
         % check network percolation status
-        [percTF,~,~] = checkLinks(dir,theseRunVals(1),cytoparams);
+        [percTF,~,~] = checkLinks(dir,theseRunVals(1),cytoparams,4);
         filtering.spanCheck = percTF(1);
         percStatus(netIdx,repIdx,:) = reshape(percTF,[1,1,2]);
         % analyze network position data

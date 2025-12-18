@@ -70,7 +70,7 @@ if newReports
         unshiftedRunVals_s = (netIdx - 1)*nShearForces:(netIdx * nShearForces - 1);
         theseRunVals_s = (repIdx - 1) * runsPerRep + unshiftedRunVals_s;
         % check network percolation status
-        [percTF_s,~,~] = checkLinks(sheardir,theseRunVals_s(1),cytoparams);
+        [percTF_s,~,~] = checkLinks(sheardir,theseRunVals_s(1),cytoparams,4);
         filtering_s.spanCheck = percTF_s(1);
         percStatus_s(netIdx,repIdx,:) = reshape(percTF_s,[1,1,2]);
         % analyze network position data

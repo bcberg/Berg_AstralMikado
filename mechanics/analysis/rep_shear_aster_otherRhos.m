@@ -58,7 +58,7 @@ if newReports
                 repShift = (repIdx - 1) * runsPerRep;
                 theseRunVals = densShift + repShift + unshiftedRunVals;
                 % check network percolation status
-                [percTF,~,~] = checkLinks(dir,theseRunVals(1),cytoparams);
+                [percTF,~,~] = checkLinks(dir,theseRunVals(1),cytoparams,4);
                 filtering.spanCheck = percTF(1);
                 percStatus(netIdx,densIdx,repIdx,:) = reshape(percTF, ...
                     [1,1,1,2]);
