@@ -32,7 +32,9 @@ To run and analyze a simulation, follow these steps:
 Instructions are available in ``cytosim-bcb/README.md``.
 3. Select a simulation routine from ``mechanics/templates/``, named with format ``simulation_name.cym.tpl``.
 Each template file indicates its purpose and specifies sweep parameters (in double square brackets ``[[ ]]``).
-4. Open the corresponding bash driver script (e.g., ``mechanics/drivers/run_simulation_name.sh``).
+4. Open the appropriate bash driver script (in ``mechanics/drivers/``).
+For most simulations, this is ``simul_stand.sh`` (simulations handled by this script are listed in a comment at the top of the file).
+If there is a driver named ``run_simulation_name.sh``, use this instead.
 
     1. Verify that the locations of ``Berg_AstralMikado`` and ``cytosim-bcb`` are correctly specified at the top of the file.
     2. Adjust the ``nproc`` parameter as desired (e.g., ``nproc=8`` enables simulations to run on up to 8 CPU cores in parallel).
@@ -64,5 +66,9 @@ It is called by higher-level functions and scripts:
     * For details on the types of percolation the code checks for, see ``percCheck.m``.
 * ``danglingEnds.m`` (script) quantifies dangling end properties in astral networks.
 * ``springsPerNode.m`` (script) counts the number of productive filament segments per node in astral networks
+
+Equal angle aster percolation is handled by ``generateAstralNetwork_eqSpaced.m`` and ``getAllPercCurves_eqSpaced.m``.
+
+Estimation of critical percolation densities is done in ``percCrit.m`` and ``percCrit_eqSpaced.m``.
 
 Functions are documented thoroughly in their defining ``.m`` file.

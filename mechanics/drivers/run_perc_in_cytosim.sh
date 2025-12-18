@@ -1,11 +1,10 @@
 #!/bin/bash
 
-cd ~/Documents/AstralMikadoCYM
-export myroot=$PWD
-export rundir=$PWD/runs
-# Assumes cytosim root is in an "adjacent" folder to AstralMikadoCYM
-cd ../cytosim-bcb
-export cymroot=$PWD
+export repoLocation="~/Documents/Berg_AstralMikado"
+export myroot="${repoLocation}/mechanics"
+export rundir="${myroot}/runs"
+# Assumes Cytosim root is in an "adjacent" folder to Berg_AstralMikado
+export cymroot="~/Documents/cytosim-bcb"
 
 export runName="perc_in_cytosim"
 

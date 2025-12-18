@@ -3,24 +3,23 @@
 # STANDARD SIMULATION PROTOCOL
 # Example use: >> drivers/simul_stand.sh rep_full_shear_aster_actin 30
 # Used for following simulations/parameter sweeps:
-#   rep_full_shear_aster_actin      (numRep=30)
-#   rep_full_tens_aster_actin       (numRep=30)
-#   rep_full_shear_aster_otherRhos  (numRep=30)
-#   modulus_distr_shear             (numRep=100)
-#   modulus_distr_tens              (numRep=100)
-#   rf_shear_aster_eq_actin         (numRep=30)
+#   rep_full_shear_aster_actin          (numRep=30)
+#   rep_full_tens_aster_actin           (numRep=30)
+#   rep_full_shear_aster_otherRhos      (numRep=30)
+#   modulus_distr_shear                 (numRep=100)
+#   modulus_distr_tens                  (numRep=100)
+#   rf_shear_aster_eq_actin             (numRep=30)
 #   rf_shear_aster_eq_actin_otherRhos   (numRep=30)
-#   crosslinker_dens_shear          (numRep=15)
-#   crosslinker_stiff_shear         (numRep=15)
-#   kbend_shear                     (numRep=10)
-#   krot_shear                      (numRep=10)
+#   crosslinker_dens_shear              (numRep=15)
+#   crosslinker_stiff_shear             (numRep=15)
+#   kbend_shear                         (numRep=10)
+#   krot_shear                          (numRep=10)
 
-cd ~/Documents/AstralMikadoCYM
-export myroot=$PWD
-export rundir=$PWD/runs
-# Assumes cytosim root is in an "adjacent" folder to AstralMikadoCYM
-cd ../cytosim-bcb
-export cymroot=$PWD
+export repoLocation="~/Documents/Berg_AstralMikado"
+export myroot="${repoLocation}/mechanics"
+export rundir="${myroot}/runs"
+# Assumes Cytosim root is in an "adjacent" folder to Berg_AstralMikado
+export cymroot="~/Documents/cytosim-bcb"
 
 export runName=$1
 
